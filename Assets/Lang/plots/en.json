@@ -1,0 +1,19 @@
+{
+  "iic_title": "Item Information Curves",
+  "icc_title": "Item Response Category Curves: ",
+  "boxplot_title": "Ability by answer: ",
+  "iic_xlabel": "Abilitiy",
+  "icc_xlabel": "Ability",
+  "boxplot_xlabel": "Answer",
+  "iic_ylabel": "Information",
+  "icc_ylabel": "Probability",
+  "boxplot_ylabel": "Ability",
+  "roc_title": "Receiver Operating Characteristic Curve",
+  "roc_xlabel": "False Positive Rate",
+  "roc_ylabel": "True Positive Rate",
+  "roc_ylabel2": "Ability Threshold",
+  "roc_legend": "ROC curve",
+  "precision": "Precision",
+  "recall": "Recall",
+  "not": "Not "
+}
