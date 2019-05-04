@@ -118,11 +118,6 @@ class DemoApp(BaseApp):
                     html.Div([], id='categorize-tabs-trigger', style={'display': 'none'}),
                     dcc.Tabs(id='data-categorize-tabs', value='no-tab'),
                     html.Div(id='data-categorize-tab-content', children=[
-                        dcc.Slider(min=3, max=13, step=1, value=4, marks={i+1: i for i in range(2, 12)},
-                                   id='data-ncategories-slider'),
-                        dcc.RangeSlider(min=0, max=12, value=[], dots=False, step=0.01, updatemode='drag',
-                                        allowCross=False, id='data-quantiles-slider'),
-
                         html.Div(id='categorized-column-preview'),
                     ]),
                     html.Button(self.lang.translate('layout.categorize_button_text'), id='categorize-data-button')

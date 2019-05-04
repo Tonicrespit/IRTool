@@ -86,32 +86,8 @@ class DataSourceController:
             ),
             self.app.define_callback(
                 input=[('data-categorize-tabs', 'value')],
-                output=('data-ncategories-slider', 'value'),
-                func=self.on_data_categorization_tab_change
-            ),
-            self.app.define_callback(
-                input=[('data-ncategories-slider', 'value')],
-                state=[('data-categorize-tabs', 'value')],
-                output=('data-quantiles-slider', 'value'),
-                func=self.on_ncat_slider_move
-            ),
-            self.app.define_callback(
-                input=[('data-ncategories-slider', 'value')],
-                state=[('data-categorize-tabs', 'value')],
-                output=('data-quantiles-slider', 'min'),
-                func=self.quantiles_slider_set_min
-            ),
-            self.app.define_callback(
-                input=[('data-ncategories-slider', 'value')],
-                state=[('data-categorize-tabs', 'value')],
-                output=('data-quantiles-slider', 'max'),
-                func=self.quantiles_slider_set_max
-            ),
-            self.app.define_callback(
-                input=[('data-quantiles-slider', 'value')],
-                state=[('data-categorize-tabs', 'value')],
                 output=('categorized-column-preview', 'children'),
-                func=self.on_quantile_slider_move
+                func=self.on_caategorize_tab_select
             ),
             self.app.define_callback(
                 input=[('categorize-data-button', 'n_clicks')],
@@ -234,46 +210,19 @@ class DataSourceController:
             return 'no-tab'
         return state[0]['props']['value']
 
-    def on_data_categorization_tab_change(self, tab):
-        if tab is None or tab == 'no-tab' or len(tab) <= 0:
+    def on_caategorize_tab_select(self, tab):
+        if tab == 'no-tab' or len(tab) <= 0:
             return []
-        column = self.tab_column_mapping[tab]
-        h = graph_view.plot_histogram(self.data.get_column_by_target_value(column),
+        col = self.tab_column_mapping[tab]
+
+        h = graph_view.plot_histogram(self.data.get_column_by_target_value(col),
                                       [str(self.data.get_target_value()),
                                        self.app.lang.translate('plots.not') + str(self.data.get_target_value())])
         target_x = h.figure.data[0].x
         target_y = h.figure.data[0].y
         other_x = h.figure.data[1].x
         other_y = h.figure.data[1].y
-        self.data.default_column_categorization(column, target_x, target_y, other_x, other_y)
-        return len(self.data.get_column_categories(column))
-
-    def on_ncat_slider_move(self, nquant, tab):
-        if nquant is None or tab is None or tab == 'no-tab' or len(tab) <= 0:
-            return []
-        col = self.tab_column_mapping[tab]
-        q = self.data.get_col_quantiles(col, nquant)
-        q = np.round(q, 2)
-        return q
-
-    def quantiles_slider_set_min(self, cuts, tab):
-        if tab is None or tab == 'no-tab' or len(tab) <= 0:
-            return 0
-        col = self.tab_column_mapping[tab]
-        min = self.data.get_col_min(col)
-        return math.floor(min)
-
-    def quantiles_slider_set_max(self, cuts, tab):
-        if tab is None or tab == 'no-tab' or len(tab) <= 0:
-            return 0
-        col = self.tab_column_mapping[tab]
-        max = self.data.get_col_max(col)
-        return math.ceil(max)
-
-    def on_quantile_slider_move(self, category_cuts, tab):
-        if category_cuts is None or tab == 'no-tab' or len(tab) <= 0:
-            return []
-        col = self.tab_column_mapping[tab]
+        self.data.default_column_categorization(col, target_x, target_y, other_x, other_y)
 
         category_summary = self.data.preview_categorization(col)
         precision, recall = self.data.compute_cuts_precision_recall(col)
